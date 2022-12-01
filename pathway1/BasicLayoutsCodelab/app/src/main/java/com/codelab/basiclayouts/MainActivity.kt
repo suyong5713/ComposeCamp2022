@@ -24,6 +24,9 @@ import androidx.annotation.StringRes
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyRow
+import androidx.compose.foundation.lazy.grid.GridCells
+import androidx.compose.foundation.lazy.grid.LazyHorizontalGrid
+import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.*
@@ -82,16 +85,19 @@ fun AlignYourBodyElement(
                     CircleShape
                 )
         )
-        Text(text = stringResource(id = text),
+        Text(
+            text = stringResource(id = text),
             style = MaterialTheme.typography.h3,
             modifier = Modifier.paddingFromBaseline(top = 24.dp, bottom = 8.dp)
-            )
+        )
     }
 }
 
 // Step: Favorite collection card - Material Surface
 @Composable
 fun FavoriteCollectionCard(
+    @DrawableRes drawable: Int,
+    @StringRes text: Int,
     modifier: Modifier = Modifier
 ) {
     Surface(shape = MaterialTheme.shapes.small, modifier = modifier) {
@@ -117,9 +123,11 @@ fun FavoriteCollectionCard(
 fun AlignYourBodyRow(
     modifier: Modifier = Modifier
 ) {
-    LazyRow(modifier = modifier,
-    horizontalArrangement = Arrangement.spacedBy(8.dp)){
-        items(alignYourBodyData){item ->
+    LazyRow(
+        modifier = modifier,
+        horizontalArrangement = Arrangement.spacedBy(8.dp)
+    ) {
+        items(alignYourBodyData) { item ->
             AlignYourBodyElement(item.drawable, item.text)
         }
     }
@@ -130,7 +138,17 @@ fun AlignYourBodyRow(
 fun FavoriteCollectionsGrid(
     modifier: Modifier = Modifier
 ) {
-    // Implement composable here
+    LazyHorizontalGrid(
+        rows = GridCells.Fixed(2),
+        modifier = modifier.height(120.dp),
+        contentPadding = PaddingValues(horizontal = 16.dp),
+        horizontalArrangement = Arrangement.spacedBy(8.dp),
+        verticalArrangement = Arrangement.spacedBy(8.dp)
+    ) {
+        items(favoriteCollectionsData) { item ->
+            FavoriteCollectionCard(item.drawable, item.text, modifier = Modifier.height(56.dp))
+        }
+    }
 }
 
 // Step: Home section - Slot APIs
@@ -205,6 +223,8 @@ fun AlignYourBodyElementPreview() {
 fun FavoriteCollectionCardPreview() {
     MySootheTheme {
         FavoriteCollectionCard(
+            drawable = R.drawable.fc2_nature_meditations,
+            text = R.string.fc2_nature_meditations,
             modifier = Modifier.padding(8.dp)
         )
     }
